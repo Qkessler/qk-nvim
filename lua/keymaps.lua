@@ -28,6 +28,10 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+vim.keymap.set('n', '<leader>ws', '<cmd>vsplit<cr>', { desc = '[W]indow [S]plit' })
+vim.keymap.set('n', '<leader>wv', '<cmd>split<cr>', { desc = '[W]indow [V]ertical' })
+vim.keymap.set('n', '<leader>wm', '<cmd>only<cr>', { desc = '[W]indow [M]aximize' })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 

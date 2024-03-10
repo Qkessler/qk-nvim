@@ -1,4 +1,33 @@
 return {
+  'udalov/kotlin-vim',
+  {
+    'mfussenegger/nvim-jdtls',
+    dependencies = {
+      'williamboman/mason.nvim',
+      'neovim/nvim-lspconfig',
+      { 'nvim-telescope/telescope.nvim', dependencies = 'nvim-lua/plenary.nvim' },
+    },
+    config = function()
+      local function setup_jdtls()
+        local mason_path = require 'mason-core.path'
+        local function get_install_path(package)
+          return require('mason-registry').get_package(package):get_install_path()
+        end
+
+        local config = {
+          cmd = { mason_path.concat { get_install_path 'jdtls', 'jdtls' } },
+        }
+        require('jdtls').start_or_attach(config)
+      end
+
+      local augroup = vim.api.nvim_create_augroup('jdtls', {})
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = 'java',
+        group = augroup,
+        callback = setup_jdtls,
+      })
+    end,
+  },
   'pmizio/typescript-tools.nvim',
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
@@ -95,6 +124,23 @@ return {
           -- Opens a popup that displays documentation about the word under your cursor
           --  See `:help K` for why this keymap
           map('K', vim.lsp.buf.hover, 'Hover Documentation')
+
+          -- Bemol configuration for an in-amazon multi-workspace set up.
+          local bemol_dir = vim.fs.find({ '.bemol' }, { upward = true, type = 'directory' })[1]
+          local ws_folders_lsp = {}
+          if bemol_dir then
+            local file = io.open(bemol_dir .. '/ws_root_folders', 'r')
+            if file then
+              for line in file:lines() do
+                table.insert(ws_folders_lsp, line)
+              end
+              file:close()
+            end
+          end
+
+          for _, line in ipairs(ws_folders_lsp) do
+            vim.lsp.buf.add_workspace_folder(line)
+          end
 
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.

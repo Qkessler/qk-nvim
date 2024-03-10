@@ -81,6 +81,10 @@ return {
       vim.keymap.set('n', '<leader>ht', builtin.help_tags, { desc = '[H]elp [T]ags' })
       vim.keymap.set('n', '<leader><leader>', builtin.commands, { desc = '[ ] Commands' })
 
+      vim.keymap.set('n', '<leader>nf', function()
+        builtin.find_files { cwd = vim.g.slipbox_dir }
+      end, { desc = '[N]otes [F]ind' })
+
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>s', function()
         -- You can pass additional configuration to telescope to change theme, layout, etc.

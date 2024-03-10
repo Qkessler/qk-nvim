@@ -6,6 +6,7 @@ vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed
 vim.g.have_nerd_font = true
+vim.g.slipbox_dir = vim.fn.expand '~/slipbox-sync/slipbox/pages'
 
 -- [[ Setting options ]]
 require 'options'
