@@ -1,4 +1,5 @@
 return {
+  'ahmedkhalf/project.nvim',
   {
     'NeogitOrg/neogit',
     branch = 'nightly',

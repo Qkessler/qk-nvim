@@ -34,6 +34,8 @@ require('lazy').setup({
 
   require 'kickstart/plugins/lspconfig',
 
+  require 'kickstart/plugins/jdtls',
+
   require 'kickstart/plugins/conform',
 
   require 'kickstart/plugins/cmp',
