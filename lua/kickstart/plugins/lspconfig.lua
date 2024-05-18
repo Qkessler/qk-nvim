@@ -14,6 +14,25 @@ return {
       { 'j-hui/fidget.nvim', opts = {} },
     },
     config = function()
+      local Amzn = {}
+      function Amzn.bemol()
+        local bemol_dir = vim.fs.find({ '.bemol' }, { upward = true, type = 'directory' })[1]
+        local ws_folders_lsp = {}
+        if bemol_dir then
+          local file = io.open(bemol_dir .. '/ws_root_folders', 'r')
+          if file then
+            for line in file:lines() do
+              table.insert(ws_folders_lsp, line)
+            end
+            file:close()
+          end
+        end
+
+        for _, line in ipairs(ws_folders_lsp) do
+          vim.lsp.buf.add_workspace_folder(line)
+        end
+      end
+
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
@@ -24,7 +43,7 @@ return {
           map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
           map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
           map('gi', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-          map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+          map('gD', "<cmd>split | lua require('telescope.builtin').lsp_definitions()<CR>", '[G]oto [D]eclaration')
           map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
           map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
           map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
@@ -49,6 +68,8 @@ return {
               callback = vim.lsp.buf.clear_references,
             })
           end
+
+          Amzn.bemol()
         end,
       })
 

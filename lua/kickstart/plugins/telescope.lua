@@ -107,7 +107,7 @@ return {
       vim.keymap.set('n', '<leader>pg', builtin.live_grep, { desc = '[P]roject [G]rep' })
       vim.keymap.set('n', '<leader>pp', extensions.zoxide.list, { desc = '[P]roject [P]icker' })
       vim.keymap.set('n', '<leader>bb', builtin.buffers, { desc = '[B]uffers' })
-      vim.keymap.set('n', '<leader>ht', builtin.help_tags, { desc = '[H]elp [T]ags' })
+      vim.keymap.set('n', '<leader>hs', builtin.help_tags, { desc = '[H]elp [S]elp' })
       vim.keymap.set('n', '<leader><leader>', builtin.commands, { desc = '[ ] Commands' })
 
       -- open file_browser with the path of the current buffer
