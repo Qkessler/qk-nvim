@@ -17,6 +17,9 @@ return {
 
       vim.cmd.colorscheme 'gruvbox-material'
       vim.o.background = 'dark'
+
+      -- Remove background on pop-ups.
+      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'None', fg = 'None' })
     end,
   },
 }

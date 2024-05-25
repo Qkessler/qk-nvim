@@ -11,7 +11,7 @@ return {
         harpoon.ui:toggle_quick_menu(harpoon:list())
       end, { desc = '[H]arpoon [T]oggle' })
       vim.keymap.set('n', '<leader>ha', function()
-        harpoon:list():append()
+        harpoon:list():add()
       end, { desc = '[H]arpoon [A]ppend' })
       vim.keymap.set('n', "<leader>'", function()
         harpoon:list():select(1)

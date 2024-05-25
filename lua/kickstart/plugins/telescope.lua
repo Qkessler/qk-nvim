@@ -53,6 +53,7 @@ return {
 
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
+      local builtin = require 'telescope.builtin'
       require('telescope').setup {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
@@ -82,6 +83,15 @@ return {
           lsp_implementations = {
             theme = 'ivy',
           },
+          buffers = {
+            show_all_buffers = true,
+            sort_mru = true,
+            mappings = {
+              i = {
+                ['<c-d>'] = 'delete_buffer',
+              },
+            },
+          },
         },
         extensions = {
           ['ui-select'] = {
@@ -92,6 +102,15 @@ return {
             -- disables netrw and use telescope-file-browser in its place
             hijack_netrw = true,
           },
+          -- zoxide = {
+          --   mappings = {
+          --     default = {
+          --       action = function(selection)
+          --         builtin.find_files { cwd = selection.path, find_command = { 'rg', '--files', '--iglob', '!.git', '--hidden' } }
+          --       end,
+          --     },
+          --   },
+          -- },
         },
       }
 
@@ -102,7 +121,6 @@ return {
       require('telescope').load_extension 'file_browser'
 
       -- See `:help telescope.builtin`
-      local builtin = require 'telescope.builtin'
       local extensions = require('telescope').extensions
       vim.keymap.set('n', '<leader>pg', builtin.live_grep, { desc = '[P]roject [G]rep' })
       vim.keymap.set('n', '<leader>pp', extensions.zoxide.list, { desc = '[P]roject [P]icker' })

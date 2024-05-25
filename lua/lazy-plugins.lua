@@ -34,8 +34,6 @@ require('lazy').setup({
 
   require 'kickstart/plugins/lspconfig',
 
-  require 'kickstart/plugins/jdtls',
-
   require 'kickstart/plugins/conform',
 
   require 'kickstart/plugins/cmp',
@@ -53,6 +51,14 @@ require('lazy').setup({
   require 'kickstart/plugins/org_mode',
 
   require 'kickstart/plugins/harpoon',
+
+  require 'kickstart/plugins/gp',
+
+  require 'kickstart/plugins/amz',
+
+  require 'kickstart/plugins/focus',
+
+  require 'kickstart/plugins/markdown',
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and

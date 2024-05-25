@@ -1,6 +1,6 @@
 return {
-  'udalov/kotlin-vim',
   'pmizio/typescript-tools.nvim',
+  'mfussenegger/nvim-jdtls',
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
     dependencies = {
@@ -14,25 +14,6 @@ return {
       { 'j-hui/fidget.nvim', opts = {} },
     },
     config = function()
-      local Amzn = {}
-      function Amzn.bemol()
-        local bemol_dir = vim.fs.find({ '.bemol' }, { upward = true, type = 'directory' })[1]
-        local ws_folders_lsp = {}
-        if bemol_dir then
-          local file = io.open(bemol_dir .. '/ws_root_folders', 'r')
-          if file then
-            for line in file:lines() do
-              table.insert(ws_folders_lsp, line)
-            end
-            file:close()
-          end
-        end
-
-        for _, line in ipairs(ws_folders_lsp) do
-          vim.lsp.buf.add_workspace_folder(line)
-        end
-      end
-
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
@@ -69,9 +50,26 @@ return {
             })
           end
 
-          Amzn.bemol()
+          -- Amzn.bemol()
         end,
       })
+
+      local function bemol_setup()
+        local bemol_dir = vim.fs.find({ '.bemol' }, { upward = true, type = 'directory' })[1]
+        local ws_folders_lsp = {}
+        if bemol_dir then
+          local file = io.open(bemol_dir .. '/ws_root_folders', 'r')
+          if file then
+            for line in file:lines() do
+              table.insert(ws_folders_lsp, line)
+            end
+            file:close()
+          end
+        end
+        for _, line in ipairs(ws_folders_lsp) do
+          vim.lsp.buf.add_workspace_folder(line)
+        end
+      end
 
       -- LSP servers and clients are able to communicate to each other what features they support.
       --  By default, Neovim doesn't support everything that is in the LSP Specification.
@@ -89,10 +87,17 @@ return {
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+      local home = os.getenv 'HOME'
+      local kotlin_server_bin = home .. '/source-repos/kotlin-language-server/server/build/install/server/bin/kotlin-language-server'
+
       local servers = {
         clangd = {},
         pyright = {},
         rust_analyzer = {},
+        kotlin_language_server = {
+          cmd = { kotlin_server_bin },
+          on_attach = bemol_setup,
+        },
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -150,14 +155,43 @@ return {
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for tsserver)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
+            require('lspconfig')[server_name].setup {
+              cmd = server.cmd,
+              settings = server.settings,
+              filetypes = server.filetypes,
+              capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {}),
+            }
+          end,
+          jdtls = function()
+            require('lspconfig').jdtls.setup {
+              on_attach = bemol_setup,
+              cmd = {
+                'jdtls',
+                '--jvm-arg=-javaagent:' .. require('mason-registry').get_package('jdtls'):get_install_path() .. '/lombok.jar',
+              },
+            }
           end,
         },
       }
+
+      local lspconfig = require 'lspconfig'
+      local configs = require 'lspconfig.configs'
+
+      -- Check if the config is already defined (useful when reloading this file)
+      if not configs.barium then
+        configs.barium = {
+          default_config = {
+            cmd = { 'barium' },
+            filetypes = { 'brazil-config' },
+            root_dir = function(fname)
+              return lspconfig.util.find_git_ancestor(fname)
+            end,
+            settings = {},
+          },
+        }
+      end
+
+      lspconfig.barium.setup {}
     end,
   },
 }

@@ -1,7 +1,8 @@
 return {
-  { -- Add indentation guides even on blank lines
+  {
     'Robitx/gp.nvim',
     opts = {
+      chat_topic_gen_model = 'gpt-4o',
       openai_api_key = { 'pass', 'openai_api_key' },
       agents = {
         {
@@ -23,7 +24,8 @@ return {
     },
     config = true,
     keys = {
-      { '<leader>ac', '<cmd>GptChatToggle popup<cr>', desc = '[C]hat [T]oggle' },
+      { '<leader>ct', '<cmd>GpChatToggle popup<cr>', desc = '[C]hat [T]oggle' },
+      { '<leader>cs', '<cmd>GpChatRespond<cr>', desc = '[C]hat [S]end' },
     },
   },
 }
