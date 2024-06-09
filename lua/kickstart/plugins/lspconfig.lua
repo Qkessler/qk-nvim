@@ -1,6 +1,8 @@
 return {
   'pmizio/typescript-tools.nvim',
-  'mfussenegger/nvim-jdtls',
+  { 'mfussenegger/nvim-jdtls', dependencies = {
+    'mfussenegger/nvim-dap',
+  } },
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
     dependencies = {
@@ -49,8 +51,6 @@ return {
               callback = vim.lsp.buf.clear_references,
             })
           end
-
-          -- Amzn.bemol()
         end,
       })
 
@@ -163,8 +163,15 @@ return {
             }
           end,
           jdtls = function()
+            local bundles = {
+              vim.fn.glob(home .. '/source-repos/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar', true),
+            }
+            vim.list_extend(bundles, vim.split(vim.fn.glob(home .. '/source-repos/vscode-java-test/server/*.jar', true), '\n'))
             require('lspconfig').jdtls.setup {
               on_attach = bemol_setup,
+              init_options = {
+                bundles = bundles,
+              },
               cmd = {
                 'jdtls',
                 '--jvm-arg=-javaagent:' .. require('mason-registry').get_package('jdtls'):get_install_path() .. '/lombok.jar',

@@ -17,7 +17,7 @@ return {
     },
     config = true,
     keys = {
-      { '<leader>gs', '<cmd>Neogit<cr>', desc = 'Neogit' },
+      { '<leader>gs', '<cmd>Neogit cwd=%:p:h<cr>', desc = '[G]it [S]tatus' },
     },
   },
   {

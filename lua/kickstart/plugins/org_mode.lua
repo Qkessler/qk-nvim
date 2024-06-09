@@ -3,6 +3,7 @@ return {
     'nvim-orgmode/orgmode',
     dependencies = {
       { 'nvim-treesitter/nvim-treesitter', lazy = true },
+      { 'nvim-telescope/telescope.nvim' },
     },
     event = 'VeryLazy',
     config = function()

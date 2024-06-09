@@ -60,6 +60,12 @@ require('lazy').setup({
 
   require 'kickstart/plugins/markdown',
 
+  require 'kickstart/plugins/marp',
+
+  require 'kickstart/plugins/mail',
+
+  require 'kickstart/plugins/anki',
+
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- put them in the right spots if you want.
@@ -97,6 +103,9 @@ require('lazy').setup({
       task = '📌',
       lazy = '💤 ',
     },
+  },
+  dev = {
+    path = '/tmp',
   },
 })
 

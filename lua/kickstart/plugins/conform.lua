@@ -17,6 +17,15 @@ return {
         -- is found.
         javascript = { { 'prettierd', 'prettier' } },
         typescript = { { 'prettierd', 'prettier' } },
+        java = { { 'prettierd', 'prettier' } },
+      },
+      formatters = {
+        prettierd = {
+          prepend_args = { '--plugin=prettier-plugin-java' },
+        },
+        prettier = {
+          prepend_args = { '--plugin=prettier-plugin-java' },
+        },
       },
     },
   },
